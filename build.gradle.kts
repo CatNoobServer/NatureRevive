@@ -1,10 +1,10 @@
 plugins {
     id("java")
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.11" apply false
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.18" apply false
 }
 
 group = "engineer.skyouo.plugins.naturerevive"
-version = "2.1.2"
+version = "2.1.3"
 
 repositories {
     mavenCentral()

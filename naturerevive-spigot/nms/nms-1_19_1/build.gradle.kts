@@ -3,6 +3,7 @@ plugins {
     id("io.papermc.paperweight.userdev")
 }
 
+paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION
 
 group = "engineer.skyouo.plugins.naturerevive.spigot.nms"
 version = project.rootProject.version

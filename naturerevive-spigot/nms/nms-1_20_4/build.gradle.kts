@@ -7,6 +7,8 @@ plugins {
 group = "engineer.skyouo.plugins.naturerevive.spigot.nms"
 version = project.rootProject.version
 
+paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION
+
 dependencies {
     paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
 

@@ -37,6 +37,8 @@ dependencies {
     compileOnly("net.coreprotect:coreprotect:21.0")
     compileOnly("com.github.TechFortress:GriefPrevention:16.18")
     compileOnly("com.griefdefender:api:2.1.0-SNAPSHOT")
+    compileOnly("cn.lunadeer:DominionAPI:4.3")
+    
     compileOnly(files("libs/Residence5.1.5.0.jar"))
 
     implementation(project(":naturerevive-common"))
