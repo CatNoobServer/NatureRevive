@@ -62,10 +62,10 @@ public class YamlDatabaseAdapter implements DatabaseConfig {
     }
 
     private String safeFormatLocation(BukkitPositionInfo location) {
-        return new String(Base64.getEncoder().encode((location.getWorldName() + "|" + location.getLocation().getChunk().getX() + "|" + location.getLocation().getChunk().getZ()).getBytes()));
+        return new String(Base64.getEncoder().encode((location.getWorldName() + "|" + (location.getLocation().getBlockX() >> 4) + "|" + (location.getLocation().getBlockZ() >> 4)).getBytes()));
     }
 
     private String formatLocation(Location location) {
-        return new String(Base64.getEncoder().encode((location.getWorld().getName() + "|" + location.getChunk().getX() + "|" + location.getChunk().getZ()).getBytes()));
+        return new String(Base64.getEncoder().encode((location.getWorld().getName() + "|" + (location.getBlockX() >> 4) + "|" + (location.getBlockZ() >> 4)).getBytes()));
     }
 }
