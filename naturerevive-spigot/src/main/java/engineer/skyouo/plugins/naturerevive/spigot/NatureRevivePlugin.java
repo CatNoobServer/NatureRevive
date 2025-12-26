@@ -77,7 +77,7 @@ public class NatureRevivePlugin extends JavaPlugin implements IAPIMain {
             databaseConfig = readonlyConfig.determineDatabase();
         } catch (Exception ex) {
             NatureReviveComponentLogger.error("&c資料庫初始化失敗!");
-            NatureReviveComponentLogger.warning("&c倘若您使用 MySQL，請確認好您以創建對應的 database。");
+            NatureReviveComponentLogger.warning("&c倘若您使用 MySQL，請確認好您已創建對應的 database。");
 
             getPluginLoader().disablePlugin(this);
             return;
