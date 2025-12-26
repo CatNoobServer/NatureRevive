@@ -21,7 +21,7 @@ public class ReadonlyConfig {
 
     private YamlFile configuration;
 
-    public final int CONFIG_VERSION = 18;
+    public final int CONFIG_VERSION = 19;
 
     public boolean debug;
 
@@ -30,6 +30,8 @@ public class ReadonlyConfig {
     public boolean griefPreventionStrictCheck;
 
     public boolean griefDefenderStrictCheck;
+
+    public boolean dominionStrictCheck;
 
     public boolean saferOreObfuscation;
 
@@ -686,6 +688,10 @@ public class ReadonlyConfig {
                 )));
 
                 configuration.set("coreprotect-logging-enable", true);
+            case 18:
+                configuration.set("dominion-strict-check", false);
+                configuration.setComment("dominion-strict-check", convertListStringToString(Arrays.asList("是否啟用 再生含有GD領地的區塊，但是不再生 Dominion 領地範圍內的方塊 功能",
+                        "Whether to enable the experimental function that if the expired chunk has Dominion's claims in it, put all blocks in Dominion's claims to new chunk instead of skipping chunk.")));
             default:
                 configuration.set("config-version", CONFIG_VERSION);
                 try {
@@ -703,6 +709,7 @@ public class ReadonlyConfig {
         residenceStrictCheck = configuration.getBoolean("residence-strict-check", false); // new options: lands.strict
         griefPreventionStrictCheck = configuration.getBoolean("griefprevention-strict-check", false); // new options: lands.strict
         griefDefenderStrictCheck = configuration.getBoolean("griefdefender-strict-check", false); // new options: lands.strict
+        dominionStrictCheck = configuration.getBoolean("dominion-strict-check", false); // new options: lands.strict
 
         saferOreObfuscation = configuration.getBoolean("safer-ore-obfuscation", false); // ore-obfuscation.safer
         adaptiveLootChestReplacement = configuration.getBoolean("adaptive-loot-chest-replacement", false); // loot-chest.enable-prefill inverse
