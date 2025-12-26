@@ -21,20 +21,20 @@ public class RegenTask implements Task {
         if (queue.size() > 0 && isSuitableForChunkRegeneration()) {
             for (int i = 0; i < readonlyConfig.taskPerProcess && queue.hasNext(); i++) {
                 BukkitPositionInfo task = queue.pop();
-
-                if (!readonlyConfig.allowedWorld.isEmpty() && !readonlyConfig.allowedWorld.contains(task.getLocation().getWorld().getName()))
-                    continue;
-
-                if (readonlyConfig.ignoredWorld.contains(task.getLocation().getWorld().getName()))
-                    continue;
-
-                List<ILandPluginIntegration> integrations = IntegrationUtil.getLandIntegrations();
-
-                if (!integrations.isEmpty() &&
-                        integrations.stream().anyMatch(integration -> integration.checkHasLand(task.getLocation().getChunk()) && !integration.isStrictMode()))
-                    continue;
-
                 ScheduleUtil.REGION.runTask(NatureRevivePlugin.instance, task.getLocation(), () -> {
+
+                    if (!readonlyConfig.allowedWorld.isEmpty() && !readonlyConfig.allowedWorld.contains(task.getLocation().getWorld().getName()))
+                        return;
+
+                    if (readonlyConfig.ignoredWorld.contains(task.getLocation().getWorld().getName()))
+                        return;
+
+                    List<ILandPluginIntegration> integrations = IntegrationUtil.getLandIntegrations();
+
+                    if (!integrations.isEmpty() &&
+                            integrations.stream().anyMatch(integration -> integration.checkHasLand(task.getLocation().getChunk()) && !integration.isStrictMode()))
+                        return;
+
                     task.regenerateChunk();
 
                     NatureReviveComponentLogger.debug("%s was regenerated.", TextColor.fromHexString("#AAAAAA"), task);
@@ -42,7 +42,7 @@ public class RegenTask implements Task {
             }
         } else {
             // 未達成 無法生成區塊 清除序列
-            while (queue.hasNext()){
+            while (queue.hasNext()) {
                 queue.pop();
             }
         }
