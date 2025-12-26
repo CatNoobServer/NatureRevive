@@ -43,19 +43,19 @@ public class ChunkRegeneration {
         List<NbtWithPos> nbtWithPos = new ArrayList<>();
 
         World world = location.getWorld();
-        // Thanks to xuan
-        int centerX = location.getBlockX() >> 4;
-        int centerZ = location.getBlockZ() >> 4;
-        for (int x = -radius; x < (radius + 1); x++) {
-            for (int z = -radius; z < (radius + 1); z++) {
-                world.addPluginChunkTicket(centerX + x, centerZ + z, instance);
-            }
-        }
-
         Chunk chunk = location.getChunk();
 
         if (!location.getWorld().isChunkGenerated(chunk.getX(), chunk.getZ())) {
             return;
+        }
+        // Thanks to xuan
+        int centerX = location.getBlockX() >> 4;
+        int centerZ = location.getBlockZ() >> 4;
+
+        for (int x = -radius; x < (radius + 1); x++) {
+            for (int z = -radius; z < (radius + 1); z++) {
+                world.addPluginChunkTicket(centerX + x, centerZ + z, instance);
+            }
         }
 
         boolean checkBiomes = !readonlyConfig.ignoredBiomes.isEmpty();
@@ -136,13 +136,17 @@ public class ChunkRegeneration {
                     coreProtectAPILogging(chunk, oldChunkSnapshot);
             });
         } else {
+            System.out.println("A");
             ElytraRegeneration.isEndShip(integrations, chunk, newChunkSnapshot);
 
+            System.out.println("B");
             StructureRegeneration.savingMovableStructure(chunk, oldChunkSnapshot);
 
+            System.out.println("C");
             if (!integrations.isEmpty() && !bypassClaimCheck)
                 landOldStateRevert(integrations, chunk, oldChunkSnapshot, nbtWithPos);
 
+            System.out.println("D");
             if (IntegrationUtil.hasValidLoggingIntegration())
                 coreProtectAPILogging(chunk, oldChunkSnapshot);
         }
