@@ -42,6 +42,8 @@ public class RegenTask implements Task {
             }
         } else {
             // 未達成 無法生成區塊 清除序列
+            // todo: drop this is wasting, consider a thing that could storage
+            // such waste information back to queue
             while (queue.hasNext()) {
                 queue.pop();
             }
