@@ -147,7 +147,7 @@ public class ChunkRegeneration {
                 coreProtectAPILogging(chunk, oldChunkSnapshot);
         }
 
-        ScheduleUtil.GLOBAL.runTaskLater(instance, () -> Bukkit.getPluginManager().callEvent(new ChunkRegenEvent(chunk, LocalDateTime.now())), 4L);
+        ScheduleUtil.REGION.runTaskLater(instance, chunk, () -> Bukkit.getPluginManager().callEvent(new ChunkRegenEvent(chunk, LocalDateTime.now())), 4L);
     }
 
     private static void coreProtectAPILogging(Chunk chunk, ChunkSnapshot oldChunkSnapshot) {
