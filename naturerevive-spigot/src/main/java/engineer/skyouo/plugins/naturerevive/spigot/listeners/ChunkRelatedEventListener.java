@@ -180,7 +180,7 @@ public class ChunkRelatedEventListener implements Listener {
             BukkitPositionInfo dummy = new BukkitPositionInfo(e.getWorld().getName(), e.getChunk().getX(), e.getChunk().getZ(), 0);
             BukkitPositionInfo positionInfo = NatureRevivePlugin.databaseConfig.get(dummy);
 
-            if (positionInfo == null)
+            if (positionInfo == null || positionInfo.getTTL() == 0)
                 return;
 
             if (positionInfo.isOverTTL()) {

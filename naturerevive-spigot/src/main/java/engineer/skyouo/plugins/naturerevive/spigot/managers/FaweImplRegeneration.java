@@ -1,5 +1,6 @@
 package engineer.skyouo.plugins.naturerevive.spigot.managers;
 
+import com.fastasyncworldedit.core.Fawe;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
@@ -43,18 +44,17 @@ public class FaweImplRegeneration {
                         .seed(chunk.getWorld().getSeed())
                         .regenBiomes(regenBiomes)
                         .build();
-                success = bukkitWorld.regenerate(region, session, options);
+                bukkitWorld.regenerate(region, session, options);
+                NatureReviveComponentLogger.debug("Regen time cost %d ms", TextColor.fromHexString("#AAAAAA"),
+                        System.currentTimeMillis() - o);
+                if (afterTask != null)
+                    ScheduleUtil.REGION.runTask(NatureRevivePlugin.instance, chunk, afterTask);
             } finally {
                 session.setMask(mask);
                 session.setSourceMask(mask);
             }
 
             Operations.complete(session.commit());
-
-            NatureReviveComponentLogger.debug("Regen time cost %d ms", TextColor.fromHexString("#AAAAAA"),
-                    System.currentTimeMillis() - o);
         }
-        if (afterTask != null)
-            ScheduleUtil.REGION.runTask(NatureRevivePlugin.instance, chunk, afterTask);
     }
 }

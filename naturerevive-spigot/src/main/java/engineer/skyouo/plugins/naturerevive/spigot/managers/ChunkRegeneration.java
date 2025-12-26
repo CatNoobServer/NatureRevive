@@ -136,17 +136,13 @@ public class ChunkRegeneration {
                     coreProtectAPILogging(chunk, oldChunkSnapshot);
             });
         } else {
-            System.out.println("A");
             ElytraRegeneration.isEndShip(integrations, chunk, newChunkSnapshot);
 
-            System.out.println("B");
             StructureRegeneration.savingMovableStructure(chunk, oldChunkSnapshot);
 
-            System.out.println("C");
             if (!integrations.isEmpty() && !bypassClaimCheck)
                 landOldStateRevert(integrations, chunk, oldChunkSnapshot, nbtWithPos);
 
-            System.out.println("D");
             if (IntegrationUtil.hasValidLoggingIntegration())
                 coreProtectAPILogging(chunk, oldChunkSnapshot);
         }
