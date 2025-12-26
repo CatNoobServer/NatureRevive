@@ -48,7 +48,7 @@ public class FaweImplRegeneration {
                 NatureReviveComponentLogger.debug("Regen time cost %d ms", TextColor.fromHexString("#AAAAAA"),
                         System.currentTimeMillis() - o);
                 if (afterTask != null)
-                    ScheduleUtil.REGION.runTask(NatureRevivePlugin.instance, chunk, afterTask);
+                    afterTask.run();
             } finally {
                 session.setMask(mask);
                 session.setSourceMask(mask);
