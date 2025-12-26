@@ -113,6 +113,22 @@ public class ScheduleUtil {
                 return new WrappedTask(Bukkit.getScheduler().runTaskTimer(plugin, task, delay, fixedRate));
             }
         }
+
+        public static WrappedTask runTaskAsynchronouslyIfApplicate(Plugin plugin, Chunk chunk, Runnable task) {
+            if (isFolia) {
+                return new WrappedTask(Bukkit.getRegionScheduler().run(plugin, chunk.getWorld(), chunk.getX(), chunk.getZ(), (ignored) -> task.run()));
+            } else {
+                return new WrappedTask(Bukkit.getScheduler().runTaskAsynchronously(plugin, task));
+            }
+        }
+
+        public static WrappedTask runTaskAsynchronouslyIfApplicate(Plugin plugin, Location location, Runnable task) {
+            if (isFolia) {
+                return new WrappedTask(Bukkit.getRegionScheduler().run(plugin, location, (ignored) -> task.run()));
+            } else {
+                return new WrappedTask(Bukkit.getScheduler().runTaskAsynchronously(plugin, task));
+            }
+        }
     }
 
     public static class ENTITY {
