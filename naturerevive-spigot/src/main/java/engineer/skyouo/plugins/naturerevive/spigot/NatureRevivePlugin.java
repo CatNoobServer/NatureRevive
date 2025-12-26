@@ -14,6 +14,7 @@ import engineer.skyouo.plugins.naturerevive.spigot.commands.regen.RegenThisChunk
 import engineer.skyouo.plugins.naturerevive.spigot.commands.utility.ReloadCommand;
 import engineer.skyouo.plugins.naturerevive.spigot.config.DatabaseConfig;
 import engineer.skyouo.plugins.naturerevive.spigot.config.ReadonlyConfig;
+import engineer.skyouo.plugins.naturerevive.spigot.config.adapters.YamlDatabaseAdapter;
 import engineer.skyouo.plugins.naturerevive.spigot.constants.OreBlocksCompat;
 import engineer.skyouo.plugins.naturerevive.spigot.integration.IntegrationManager;
 import engineer.skyouo.plugins.naturerevive.spigot.integration.IntegrationUtil;
@@ -181,7 +182,14 @@ public class NatureRevivePlugin extends JavaPlugin implements IAPIMain {
 
     @Override
     public void onDisable() {
-
+        if (NatureRevivePlugin.databaseConfig instanceof YamlDatabaseAdapter) {
+            try {
+                NatureRevivePlugin.databaseConfig.save();
+                NatureRevivePlugin.databaseConfig.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private boolean registerCommand(String commandName, CommandExecutor executor) {
