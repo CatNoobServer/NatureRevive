@@ -6,6 +6,7 @@ import engineer.skyouo.plugins.naturerevive.spigot.events.ChunkRegenEvent;
 import engineer.skyouo.plugins.naturerevive.spigot.integration.IntegrationUtil;
 import engineer.skyouo.plugins.naturerevive.spigot.integration.engine.IEngineIntegration;
 import engineer.skyouo.plugins.naturerevive.spigot.integration.land.ILandPluginIntegration;
+import engineer.skyouo.plugins.naturerevive.spigot.integration.logging.ILoggingIntegration;
 import engineer.skyouo.plugins.naturerevive.spigot.listeners.ObfuscateLootListener;
 import engineer.skyouo.plugins.naturerevive.spigot.managers.features.ElytraRegeneration;
 import engineer.skyouo.plugins.naturerevive.spigot.managers.features.StructureRegeneration;
@@ -20,6 +21,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.BlockInventoryHolder;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -82,13 +84,15 @@ public class ChunkRegeneration {
         }
 
         // todo: make this asynchronous.
-        List<ILandPluginIntegration> integrations = IntegrationUtil.getLandIntegrations();
+        List<ILandPluginIntegration> landIntegrations = IntegrationUtil.getLandIntegrations();
+        List<ILoggingIntegration> loggingIntegrations = IntegrationUtil.getLoggingIntegrations();
 
-        if (!bypassClaimCheck) {
-            for (ILandPluginIntegration integration : integrations) {
-                if (!integration.checkHasLand(chunk)) continue;
+        if (!bypassClaimCheck ||
+                (IntegrationUtil.hasValidLoggingIntegration() && loggingIntegrations.stream().anyMatch(ILoggingIntegration::shouldLogContainer))) {
+            for (BlockState blockState : chunk.getTileEntities(false)) {
+                for (ILandPluginIntegration integration : landIntegrations) {
+                    if (bypassClaimCheck || !integration.checkHasLand(chunk)) continue;
 
-                for (BlockState blockState : chunk.getTileEntities()) {
                     if (integration.
                             isInLand(new Location(location.getWorld(), blockState.getX(), blockState.getY(), blockState.getZ()))) {
                         String nbt = nmsWrapper.getNbtAsString(chunk.getWorld(), blockState);
@@ -96,12 +100,18 @@ public class ChunkRegeneration {
                         nbtWithPos.add(new NbtWithPos(nbt, chunk.getWorld(), blockState.getX(), blockState.getY(), blockState.getZ()));
                     }
                 }
+
+                if (!(blockState instanceof BlockInventoryHolder)) continue;
+
+                for (ILoggingIntegration integration : loggingIntegrations) {
+                    integration.logContainer(new BlockStateWithPos(blockState, blockState.getLocation()));
+                }
             }
         }
 
         try {
             engine.regenerateChunk(instance, chunk, () -> {
-                regenerateAfterWork(chunk, oldChunkSnapshot, integrations, nbtWithPos, bypassClaimCheck);
+                regenerateAfterWork(chunk, oldChunkSnapshot, landIntegrations, nbtWithPos, bypassClaimCheck);
             });
         } catch (Exception ex) {
             NatureReviveComponentLogger.warning("NatureRevive 在重生世界 %s 區塊 (%d, %d) 時遇到了問題。",

@@ -21,7 +21,7 @@ public class ReadonlyConfig {
 
     private YamlFile configuration;
 
-    public final int CONFIG_VERSION = 19;
+    public final int CONFIG_VERSION = 20;
 
     public boolean debug;
 
@@ -36,6 +36,8 @@ public class ReadonlyConfig {
     public boolean saferOreObfuscation;
 
     public boolean coreProtectLogging;
+
+    public boolean coreProtectContainerLogging;
 
     public boolean adaptiveLootChestReplacement;
 
@@ -181,6 +183,10 @@ public class ReadonlyConfig {
             configuration.set("coreprotect-logging-enable", true);
             configuration.setComment("coreprotect-logging-enable", convertListStringToString(Arrays.asList("是否啟用 CoreProtect 的紀錄功能.",
                     "Whether or not to enable the CoreProtect logging integration.")));
+
+            configuration.set("coreprotect-container-logging-enable", true);
+            configuration.setComment("coreprotect-container-logging-enable", convertListStringToString(Arrays.asList("是否啟用 CoreProtect 的紀錄功能，用以紀錄被重生區塊的容器內容。",
+                    "Whether or not to enable the CoreProtect logging integration to log the container.")));
 
             configuration.set("coreprotect-log-username", "#資源再生");
             configuration.setComment("coreprotect-log-username", convertListStringToString(Arrays.asList("在 CoreProtect 紀錄中，有關此插件相關改動的顯示名稱",
@@ -692,6 +698,10 @@ public class ReadonlyConfig {
                 configuration.set("dominion-strict-check", false);
                 configuration.setComment("dominion-strict-check", convertListStringToString(Arrays.asList("是否啟用 再生含有GD領地的區塊，但是不再生 Dominion 領地範圍內的方塊 功能",
                         "Whether to enable the experimental function that if the expired chunk has Dominion's claims in it, put all blocks in Dominion's claims to new chunk instead of skipping chunk.")));
+            case 19:
+                configuration.set("coreprotect-container-logging-enable", true);
+                configuration.setComment("coreprotect-container-logging-enable", convertListStringToString(Arrays.asList("是否啟用 CoreProtect 的紀錄功能，用以紀錄被重生區塊的容器內容。",
+                        "Whether or not to enable the CoreProtect logging integration to log the container.")));
             default:
                 configuration.set("config-version", CONFIG_VERSION);
                 try {
@@ -715,6 +725,7 @@ public class ReadonlyConfig {
         adaptiveLootChestReplacement = configuration.getBoolean("adaptive-loot-chest-replacement", false); // loot-chest.enable-prefill inverse
         suppressNearbyChunkCount = configuration.getInt("suppress-chunk-refresh-radius", 0); // regenerate-track-nearby-n-chunks
         coreProtectLogging = configuration.getBoolean("coreprotect-logging-enable", true); // new-options: logging.disable
+        coreProtectContainerLogging = configuration.getBoolean("coreprotect-container-logging-enable", true); // new-options: logging.container.disable
         enableOreObfuscation = configuration.getBoolean("enable-ore-obfuscation", false); // ore-obfuscation.enable
 
         taskPerProcess = configuration.getInt("task-process-per-tick", 1); // regenerate-n-chunks-per-time

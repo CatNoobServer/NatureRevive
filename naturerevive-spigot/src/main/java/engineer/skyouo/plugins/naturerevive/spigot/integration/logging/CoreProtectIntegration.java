@@ -2,8 +2,10 @@ package engineer.skyouo.plugins.naturerevive.spigot.integration.logging;
 
 import engineer.skyouo.plugins.naturerevive.spigot.NatureRevivePlugin;
 import engineer.skyouo.plugins.naturerevive.spigot.structs.BlockDataChangeWithPos;
+import engineer.skyouo.plugins.naturerevive.spigot.structs.BlockStateWithPos;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;
+import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.plugin.Plugin;
 
 import static engineer.skyouo.plugins.naturerevive.spigot.NatureRevivePlugin.readonlyConfig;
@@ -29,12 +31,12 @@ public class CoreProtectIntegration implements ILoggingIntegration {
 
     @Override
     public boolean isEnabled() {
-        return coreProtectAPI != null && readonlyConfig.coreProtectLogging;
+        return coreProtectAPI != null && (readonlyConfig.coreProtectLogging || !readonlyConfig.coreProtectContainerLogging);
     }
 
     @Override
     public boolean shouldExitOnFatal() {
-        return readonlyConfig.coreProtectLogging;
+        return readonlyConfig.coreProtectLogging || readonlyConfig.coreProtectContainerLogging;
     }
 
     @Override
@@ -46,5 +48,22 @@ public class CoreProtectIntegration implements ILoggingIntegration {
             coreProtectAPI.logPlacement(readonlyConfig.coreProtectUserName, data.getLocation(), data.getNewBlockData().getMaterial(), data.getNewBlockData());
 
         return true;
+    }
+
+    @Override
+    public boolean logContainer(BlockStateWithPos data) {
+        if (data.getBlockState() instanceof BlockInventoryHolder holder) {
+            coreProtectAPI.logContainerTransaction(readonlyConfig.coreProtectUserName, data.getLocation());
+            holder.getInventory().clear();
+            data.getBlockState().update(true);
+            return true;
+
+        }
+        return false;
+    }
+
+    @Override
+    public boolean shouldLogContainer() {
+        return readonlyConfig.coreProtectContainerLogging;
     }
 }
