@@ -27,7 +27,7 @@ repositories {
 
 dependencies {
     implementation("com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4")
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
 
 
     compileOnly("com.zaxxer:HikariCP:4.0.3")

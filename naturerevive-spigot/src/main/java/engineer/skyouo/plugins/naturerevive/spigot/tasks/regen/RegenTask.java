@@ -22,7 +22,6 @@ public class RegenTask implements Task {
             for (int i = 0; i < readonlyConfig.taskPerProcess && queue.hasNext(); i++) {
                 BukkitPositionInfo task = queue.pop();
                 ScheduleUtil.REGION.runTask(NatureRevivePlugin.instance, task.getLocation(), () -> {
-
                     if (!readonlyConfig.allowedWorld.isEmpty() && !readonlyConfig.allowedWorld.contains(task.getLocation().getWorld().getName()))
                         return;
 
