@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 public class VersionUtil {
     private static Boolean isPaperCache;
+    private static Boolean isFoliaCache;
     public static boolean isPaper() {
         if (isPaperCache != null)
             return isPaperCache;
@@ -14,6 +15,20 @@ public class VersionUtil {
             return true;
         } catch (Exception e) {
             isPaperCache = false;
+            return false;
+        }
+    }
+
+    public static boolean isFolia() {
+        if (isFoliaCache != null)
+            return isFoliaCache;
+
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            isFoliaCache = true;
+            return true;
+        } catch (Exception ignored) {
+            isFoliaCache = false;
             return false;
         }
     }

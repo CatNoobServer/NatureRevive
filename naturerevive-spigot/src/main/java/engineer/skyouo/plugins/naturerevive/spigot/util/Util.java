@@ -71,20 +71,10 @@ public class Util {
     }
 
     public static boolean isPaper() {
-        try {
-            Class.forName("com.destroystokyo.paper.PaperConfig");
-            return true;
-        } catch (Exception ignored) {
-            return false;
-        }
+        return VersionUtil.isPaper();
     }
 
     public static boolean isFolia() {
-        try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-            return true;
-        } catch (Exception ignored) {
-            return false;
-        }
+        return VersionUtil.isFolia();
     }
 }
